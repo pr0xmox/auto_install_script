@@ -1,6 +1,14 @@
 
 #Dọn gói cũ tránh xung đột
-for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt remove $pkg; done
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do
+    if dpkg -l | grep -qw "$pkg"; then
+        echo "Removing package: $pkg"
+        sudo apt remove -y "$pkg"
+    else
+        echo "Package not installed: $pkg"
+    fi
+done
+
 
 # thêm key gpg của docker
 sudo apt update
